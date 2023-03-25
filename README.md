@@ -1,5 +1,6 @@
 # 501Project
 
+Work Division
 
 	Weihao Li:Login + register + profile
   	Tongfan Wei: MainActivity + part of platform detail
