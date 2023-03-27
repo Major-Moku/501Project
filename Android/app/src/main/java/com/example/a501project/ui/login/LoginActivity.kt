@@ -1,20 +1,22 @@
 package com.example.a501project.ui.login
 
 import android.app.Activity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.a501project.NavigationActivity
+import com.example.a501project.R
 import com.example.a501project.databinding.ActivityLoginBinding
 
-import com.example.a501project.R
 
 class LoginActivity : AppCompatActivity() {
 
@@ -52,13 +54,14 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }
+            updateUiWithUser()
+//            loading.visibility = View.GONE
+//            if (loginResult.error != null) {
+//                showLoginFailed(loginResult.error)
+//            }
+//            if (loginResult.success != null) {
+//                updateUiWithUser(loginResult.success)
+//            }
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
@@ -98,6 +101,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateUiWithUser() {
+        // temporary
+        val intent = Intent(this, NavigationActivity::class.java)
+        startActivity(intent)
+    }
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
