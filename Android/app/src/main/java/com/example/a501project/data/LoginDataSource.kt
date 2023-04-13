@@ -6,6 +6,7 @@ import java.io.IOException
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
+// 此类用于和数据库交互
 class LoginDataSource {
 
     fun login(username: String, password: String): Result<LoggedInUser> {

@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.a501project.NavigationActivity
 import com.example.a501project.R
 import com.example.a501project.databinding.ActivityLoginBinding
+import com.example.a501project.ui.register.RegisterActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -35,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         val loading = binding.loading
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+            .get(LoginViewModel::class.java)  //获取ViewModel,让ViewModel与此activity绑定
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -54,14 +55,14 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            updateUiWithUser()
-//            loading.visibility = View.GONE
-//            if (loginResult.error != null) {
-//                showLoginFailed(loginResult.error)
-//            }
-//            if (loginResult.success != null) {
-//                updateUiWithUser(loginResult.success)
-//            }
+//            updateUiWithUser()
+            loading.visibility = View.GONE
+            if (loginResult.error != null) {
+                showLoginFailed(loginResult.error)
+            }
+            if (loginResult.success != null) {
+                updateUiWithUser(loginResult.success)
+            }
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
@@ -96,9 +97,16 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                loginViewModel.login(username.text.toString(), password.text.toString())  // 调用viewmodel的login函数以设置loginresult.value
             }
         }
+
+
+        binding.register?.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun updateUiWithUser() {
@@ -115,6 +123,8 @@ class LoginActivity : AppCompatActivity() {
             "$welcome $displayName",
             Toast.LENGTH_LONG
         ).show()
+        val intent = Intent(this, NavigationActivity::class.java)
+        startActivity(intent)
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
