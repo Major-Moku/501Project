@@ -8,7 +8,7 @@ object CurrentUser {
 
     // TODO login需要使用的方法， 获取favoriteList....
 
-    fun getFavoriteList(): List<Game> {
+    fun getFavList(): List<Game> {
         return favoriteList
     }
 
