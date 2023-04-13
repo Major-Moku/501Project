@@ -33,8 +33,8 @@ class HomeFragment : Fragment() {
 
         // Create a list of games with their names and server status
         val gameList = listOf(
-            Game("Apex Legends", R.drawable.game_a, true),
-            Game("DOTA2", R.drawable.game_b, false),
+            Game("Steam", R.drawable.game_a, true),
+            Game("Origin", R.drawable.game_b, false),
             //Game("Game C", R.drawable.game_c, true),
             //Game("Game D", R.drawable.game_d, true),
             //Game("Game E", R.drawable.game_e, false)
