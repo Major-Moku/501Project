@@ -7,4 +7,21 @@ object CurrentUser {
     lateinit var favoriteList: List<Game>
 
     // TODO login需要使用的方法， 获取favoriteList....
+
+    fun getFavoriteList(): List<Game> {
+        return favoriteList
+    }
+
+    fun syncFavoriteList(){
+        // TODO http request
+        // favoriteList =
+    }
+
+    fun addFavorite(game: Game) {
+
+        // TODO http request
+        syncFavoriteList()
+    }
+
+
 }

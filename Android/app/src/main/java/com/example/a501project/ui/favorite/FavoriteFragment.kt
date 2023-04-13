@@ -39,16 +39,8 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        val favoriteViewModel =
-//            ViewModelProvider(this).get(FavoriteViewModel::class.java)
-//
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         val root: View = binding.root
-//
-//        val textView: TextView = binding.textFavorite
-//        favoriteViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
 
         // set up the favorite list
         val recyclerView = binding.favoriteRv
@@ -56,6 +48,7 @@ class FavoriteFragment : Fragment() {
 
         recyclerView.layoutManager = linearLayoutManager
 
+        //TODO http request favorite list
         val myObjects = mutableListOf(
             Game("Item 1"),
             Game("Item 2"),
