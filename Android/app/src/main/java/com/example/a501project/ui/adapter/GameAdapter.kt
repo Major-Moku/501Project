@@ -24,7 +24,7 @@ class GameAdapter(private val items: MutableList<Game>) : RecyclerView.Adapter<G
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = items[position].name
-        holder.imageView.setImageResource(R.drawable.ic_launcher_foreground)
+        holder.imageView.setImageResource(items[position].myImage)
     }
 
     override fun getItemCount(): Int {
