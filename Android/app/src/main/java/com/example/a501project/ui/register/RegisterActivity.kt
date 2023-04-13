@@ -1,9 +1,11 @@
 package com.example.a501project.ui.register
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.a501project.NavigationActivity
 import com.example.a501project.databinding.RegisterBinding
 
 class RegisterActivity : AppCompatActivity(){
@@ -21,6 +23,9 @@ class RegisterActivity : AppCompatActivity(){
                 Toast.makeText(this,
                     "Success!",
                     Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, NavigationActivity::class.java)
+                startActivity(intent)
             }else{
                 Toast.makeText(this,
                     "Failed, please reenter the information.",

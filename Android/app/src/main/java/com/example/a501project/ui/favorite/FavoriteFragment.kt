@@ -50,9 +50,9 @@ class FavoriteFragment : Fragment() {
 
         //TODO http request favorite list
         val myObjects = mutableListOf(
-            Game("Item 1"),
-            Game("Item 2"),
-            Game("Item 3")
+            Game("Item 1", R.drawable.civil),
+            Game("Item 2", R.drawable.overcooked),
+            Game("Item 3", R.drawable.human_fall_flat)
         )
 
         recyclerView.adapter = GameAdapter(myObjects)
