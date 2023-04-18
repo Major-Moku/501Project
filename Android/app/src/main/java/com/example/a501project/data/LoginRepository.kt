@@ -34,7 +34,6 @@ class LoginRepository(val dataSource: LoginDataSource) {
         if (result is Result.Success) {
             setLoggedInUser(result.data)
         }
-
         return result
     }
 
