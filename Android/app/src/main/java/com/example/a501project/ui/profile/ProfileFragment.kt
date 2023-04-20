@@ -12,14 +12,16 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.a501project.databinding.FragmentProfileBinding
 import com.example.a501project.ui.register.RegisterActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
 class ProfileFragment : Fragment() {
 
-    interface OnButtonClickListener{
-        fun onButtonClick(newFragment: ProfileEditFragment)
-    }
+//    interface OnButtonClickListener{
+//        fun onButtonClick(newFragment: ProfileEditFragment)
+//    }
 
-    private var buttonClickListner: OnButtonClickListener? = null
+//    private var buttonClickListner: OnButtonClickListener? = null
 
     private var _binding: FragmentProfileBinding? = null
 
@@ -49,9 +51,14 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.editButton.setOnClickListener{
-            val newFragment = ProfileEditFragment()
-            buttonClickListner?.onButtonClick(newFragment)
+            val action = ProfileFragmentDirections.actionNavigationProfileToProfileEditFragment()
+            findNavController().navigate(action)
         }
+
+//        binding.editButton.setOnClickListener{
+//            val newFragment = ProfileEditFragment()
+//            buttonClickListner?.onButtonClick(newFragment)
+//        }
 //        TODO: get content from db and set the edittext.
 //        binding.editTextTextPersonName.setText()
 //        binding.editTextTextPersonName2.setText()

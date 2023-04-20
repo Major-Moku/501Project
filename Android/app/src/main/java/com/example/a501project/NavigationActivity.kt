@@ -1,6 +1,7 @@
 package com.example.a501project
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,8 @@ import com.example.a501project.ui.profile.ProfileEditFragment
 import com.example.a501project.ui.profile.ProfileFragment
 import androidx.fragment.app.Fragment
 
-class NavigationActivity : AppCompatActivity(), ProfileFragment.OnButtonClickListener {
+
+class NavigationActivity : AppCompatActivity()/*, ProfileFragment.OnButtonClickListener */{
 
     private lateinit var binding: ActivityNavigationBinding
 
@@ -36,19 +38,30 @@ class NavigationActivity : AppCompatActivity(), ProfileFragment.OnButtonClickLis
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-    }
-
-    override fun onButtonClick(newFragment: ProfileEditFragment){
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.container)
-        if(currentFragment is ProfileFragment){
-            val view = currentFragment.view
-            view?.findViewById<Button>(R.id.editButton)?.setOnClickListener{
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.container, newFragment)
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_home, R.id.navigation_favorite, R.id.navigation_profile -> {
+                    navView.visibility = View.VISIBLE
+                }
+                else -> {
+                    navView.visibility = View.GONE
+                }
             }
         }
+
     }
+
+//    override fun onButtonClick(newFragment: ProfileEditFragment){
+//        val currentFragment = supportFragmentManager.findFragmentById(R.id.nav_view)
+//        if(currentFragment is ProfileFragment){
+//            val view = currentFragment.view
+//            view?.findViewById<Button>(R.id.editButton)?.setOnClickListener{
+//                val fragmentTransaction = supportFragmentManager.beginTransaction()
+//                fragmentTransaction.replace(R.id.container, newFragment)
+//                fragmentTransaction.addToBackStack(null)
+//                fragmentTransaction.commit()
+//            }
+//        }
+//    }
 
 }

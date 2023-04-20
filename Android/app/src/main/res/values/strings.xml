@@ -13,6 +13,7 @@
     <string name="title_home">Home</string>
     <string name="title_favorite">Favorite</string>
     <string name="title_profile">Profile</string>
+    <string name="title_profile_edit">ProfileEdit</string>
     <string name="action_register">Register</string>
     <string name="register_nickname">Nickname</string>
     <string name="register_pwd">Password</string>

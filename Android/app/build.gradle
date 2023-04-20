@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
-
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 android {
     namespace 'com.example.a501project'
     compileSdk 33
