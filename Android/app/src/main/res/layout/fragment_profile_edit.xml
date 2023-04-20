@@ -24,11 +24,13 @@
                 android:gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:text="Username"/>
+
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:gravity="bottom"
-                android:layout_weight="3"/>
+                android:hint="Please enter your new name" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,11 +45,13 @@
                 android:gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:text="Password"/>
+
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:gravity="bottom"
-                android:layout_weight="3"/>
+                android:hint="Please enter your new password" />
         </LinearLayout>
 
         <TextView
@@ -62,14 +66,15 @@
             android:layout_height="150dp"
             android:layout_marginTop="5dp"
             style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textMultiLine"
                 android:gravity="top|start"
-                android:scrollbars="vertical"
+                android:hint="Please enter  your  new description"
+                android:inputType="textMultiLine"
                 android:lines="6"
-                />
+                android:scrollbars="vertical" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

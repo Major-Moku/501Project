@@ -15,6 +15,12 @@ import com.example.a501project.ui.register.RegisterActivity
 
 class ProfileFragment : Fragment() {
 
+    interface OnButtonClickListener{
+        fun onButtonClick(newFragment: ProfileEditFragment)
+    }
+
+    private var buttonClickListner: OnButtonClickListener? = null
+
     private var _binding: FragmentProfileBinding? = null
 
     // This property is only valid between onCreateView and
@@ -41,6 +47,11 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.editButton.setOnClickListener{
+            val newFragment = ProfileEditFragment()
+            buttonClickListner?.onButtonClick(newFragment)
+        }
 //        TODO: get content from db and set the edittext.
 //        binding.editTextTextPersonName.setText()
 //        binding.editTextTextPersonName2.setText()
