@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a501project.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.databinding.FragmentHomeBinding
+import androidx.navigation.fragment.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -46,7 +47,11 @@ class HomeFragment : Fragment() {
 
         // Create a vertical list of cards using RecyclerView
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = GameAdapter(gameList)
+        recyclerView.adapter = GameAdapter(gameList) { game ->
+            val bundle = Bundle().apply { putString("platformName", game.name) }
+            findNavController().navigate(R.id.action_homeFragment_to_gameServersFragment, bundle)
+        }
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -56,8 +61,10 @@ class HomeFragment : Fragment() {
 data class Game(val name: String, val imageRes: Int, val isOnline: Boolean)
 
 // Define a RecyclerView adapter for the list of games
-class GameAdapter(private val gameList: List<Game>) :
-    RecyclerView.Adapter<GameAdapter.ViewHolder>() {
+class GameAdapter(
+    private val gameList: List<Game>,
+    private val onGameClick: ((Game) -> Unit)? = null
+) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     // Inflate the layout for each item in the list
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -76,6 +83,11 @@ class GameAdapter(private val gameList: List<Game>) :
         } else {
             holder.statusIcon.setImageResource(R.drawable.ic_offline)
         }
+
+        // Set the click listener for the item
+        holder.itemView.setOnClickListener {
+            onGameClick?.invoke(game)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -89,3 +101,4 @@ class GameAdapter(private val gameList: List<Game>) :
         val statusIcon: ImageView = view.findViewById(R.id.status_icon)
     }
 }
+
