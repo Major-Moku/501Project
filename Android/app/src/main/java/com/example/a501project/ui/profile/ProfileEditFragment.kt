@@ -2,9 +2,14 @@ package com.example.a501project.ui.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.example.a501project.databinding.FragmentProfileEditBinding
 
 class ProfileEditFragment: Fragment() {
@@ -29,7 +34,12 @@ class ProfileEditFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.saveButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
