@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.R
+import com.example.a501project.data.CurrentUser
 import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
 import com.example.a501project.ui.adapter.GameAdapter
+import okhttp3.Request
 
 class FavoriteFragment : Fragment() {
 
@@ -47,6 +49,15 @@ class FavoriteFragment : Fragment() {
         recyclerView.layoutManager = linearLayoutManager
 
         //TODO http request favorite list
+
+        val request = Request.Builder()
+            .url("https://34.130.240.157/api/user/favoriteGames")
+            .header("username", CurrentUser.username)
+            .build()
+
+        val response = HttpClient.instance.newCall(request).execute()
+        val responseBody = response.body?.string()
+
         val myObjects = mutableListOf(
             Game("Item 1", R.drawable.civil),
             Game("Item 2", R.drawable.overcooked),
