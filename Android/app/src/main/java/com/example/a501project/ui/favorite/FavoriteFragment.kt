@@ -15,6 +15,12 @@ import com.example.a501project.data.CurrentUser
 import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
 import com.example.a501project.ui.adapter.GameAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.FormBody
 import okhttp3.Request
 
 class FavoriteFragment : Fragment() {
@@ -50,13 +56,30 @@ class FavoriteFragment : Fragment() {
 
         //TODO http request favorite list
 
-        val request = Request.Builder()
-            .url("https://34.130.240.157/api/user/favoriteGames")
-            .header("username", CurrentUser.username)
-            .build()
+        GlobalScope.launch(Dispatchers.IO) {
+            val requestBody = FormBody.Builder()
+                .add("username", "Yan3")
+                .build()
 
-        val response = HttpClient.instance.newCall(request).execute()
-        val responseBody = response.body?.string()
+            val request = Request.Builder()
+                .url("https://34.130.240.157:4567/api/user/favoriteGames")
+                .post(requestBody)
+                .get()
+                .build()
+
+            val response = HttpClient.instance.newCall(request).execute()
+            val responseBody = response.body?.string()
+
+            // process the response in the background thread
+            // ...
+
+            // update the UI in the main thread (if needed)
+            withContext(Dispatchers.Main) {
+                // update the UI
+                // ...
+            }
+        }
+
 
         val myObjects = mutableListOf(
             Game("Item 1", R.drawable.civil),
