@@ -9,13 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.R
-import com.example.a501project.data.CurrentUser
 import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
+import com.example.a501project.ui.RecyclerItemClickListener
 import com.example.a501project.ui.adapter.GameAdapter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -56,29 +54,29 @@ class FavoriteFragment : Fragment() {
 
         //TODO http request favorite list
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val requestBody = FormBody.Builder()
-                .add("username", "Yan3")
-                .build()
-
-            val request = Request.Builder()
-                .url("https://34.130.240.157:4567/api/user/favoriteGames")
-                .post(requestBody)
-                .get()
-                .build()
-
-            val response = HttpClient.instance.newCall(request).execute()
-            val responseBody = response.body?.string()
-
-            // process the response in the background thread
-            // ...
-
-            // update the UI in the main thread (if needed)
-            withContext(Dispatchers.Main) {
-                // update the UI
-                // ...
-            }
-        }
+//        GlobalScope.launch(Dispatchers.IO) {
+//            val requestBody = FormBody.Builder()
+//                .add("username", "Yan3")
+//                .build()
+//
+//            val request = Request.Builder()
+//                .url("https://34.130.240.157:4567/api/user/favoriteGames")
+//                .post(requestBody)
+//                .get()
+//                .build()
+//
+//            val response = HttpClient.instance.newCall(request).execute()
+//            val responseBody = response.body?.string()
+//
+//            // process the response in the background thread
+//            // ...
+//
+//            // update the UI in the main thread (if needed)
+//            withContext(Dispatchers.Main) {
+//                // update the UI
+//                // ...
+//            }
+//        }
 
 
         val myObjects = mutableListOf(
@@ -90,24 +88,22 @@ class FavoriteFragment : Fragment() {
         recyclerView.adapter = GameAdapter(myObjects)
 
         // Add swipe to delete
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                // Do nothing
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Remove the item from the data set
-                val position = viewHolder.adapterPosition
-                myObjects.removeAt(position)
-                recyclerView.adapter?.notifyItemRemoved(position)
-            }
-        })
+        val swipeToDeleteCallback = SwipeToDeleteCallback(recyclerView.adapter!! as GameAdapter)
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+        val itemClickListener = this.context?.let {
+            RecyclerItemClickListener(
+                it, recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        // TODO http request, go to game fragment
+                        println("lalala")
+                    }
+                })
+        }
+        if (itemClickListener != null) {
+            recyclerView.addOnItemTouchListener(itemClickListener)
+        }
 
         return root
     }
