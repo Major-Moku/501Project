@@ -58,14 +58,14 @@ class RegisterActivity : AppCompatActivity(){
                     val updateResult = updateDB(username,password).await()
 //                    println(updateResult)
                     if(updateResult.equals("New user added successfully.")){
-                        Toast.makeText(this@RegisterActivity,"New user added successfully. Please relogin.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity,"New user added successfully. Please relogin.",Toast.LENGTH_LONG).show()
                         val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                         startActivity(intent)
                     }else{
-                        Toast.makeText(this@RegisterActivity,updateResult,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity,updateResult,Toast.LENGTH_LONG).show()
                     }
                 }else{
-                    Toast.makeText(this@RegisterActivity,"user already exist, please use another username.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity,"user already exist, please use another username.",Toast.LENGTH_LONG).show()
                 }
             }
 
