@@ -9,11 +9,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.R
 import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
+import com.example.a501project.ui.RecyclerItemClickListener
 import com.example.a501project.ui.adapter.GameAdapter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.FormBody
+import okhttp3.Request
 
 class FavoriteFragment : Fragment() {
 
@@ -32,6 +41,7 @@ class FavoriteFragment : Fragment() {
             myActivity = context // Assign the activity reference
         }
     }
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,35 +57,61 @@ class FavoriteFragment : Fragment() {
         recyclerView.layoutManager = linearLayoutManager
 
         //TODO http request favorite list
-        val myObjects = mutableListOf(
-            Game("Item 1", R.drawable.civil),
-            Game("Item 2", R.drawable.overcooked),
-            Game("Item 3", R.drawable.human_fall_flat)
-        )
 
-        recyclerView.adapter = GameAdapter(myObjects)
+        GlobalScope.launch(Dispatchers.IO) {
+            val requestBody = FormBody.Builder()
+                .add("username", "Yan3")
+                .build()
 
-        // Add swipe to delete
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                // Do nothing
-                return false
+            val request = Request.Builder()
+                .url("https://cs501andriodsquad.com:4567/api/user/favoriteGames" + "?username=" + "Yan3")
+                .get()
+                .build()
+
+            val response = HttpClient.instance.newCall(request).execute()
+            val responseBody = response.body?.string()
+            val gson = Gson()
+            val type = object : TypeToken<List<String>>() {}.type
+            val favoritaGames = gson.fromJson<List<String>>(responseBody, type)
+
+            print(favoritaGames)
+            
+            withContext(Dispatchers.Main) {
+
+                val myObjects = favoritaGames.map { Game(it, getMyDrawable(it)) }.toMutableList()
+
+                recyclerView.adapter = GameAdapter(myObjects)
+                // Add swipe to delete
+                val swipeToDeleteCallback = SwipeToDeleteCallback(recyclerView.adapter!! as GameAdapter)
+                val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+                itemTouchHelper.attachToRecyclerView(recyclerView)
+                val itemClickListener = myActivity.let {
+                    RecyclerItemClickListener(
+                        it, recyclerView,
+                        object : RecyclerItemClickListener.OnItemClickListener {
+                            override fun onItemClick(view: View, position: Int) {
+                                print(myObjects[position])
+                                // TODO http request, go to game fragment
+                                println("lalala")
+                            }
+                        })
+                }
+                if (itemClickListener != null) {
+                    recyclerView.addOnItemTouchListener(itemClickListener)
+                }
             }
+        }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Remove the item from the data set
-                val position = viewHolder.adapterPosition
-                myObjects.removeAt(position)
-                recyclerView.adapter?.notifyItemRemoved(position)
-            }
-        })
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+
 
         return root
+    }
+
+    private fun getMyDrawable(it: String): Int {
+        if (it == "LOL") return R.drawable.civil
+        else if (it == "Gensin Impact") return R.drawable.overcooked
+        else return R.drawable.human_fall_flat
     }
 
     override fun onDestroyView() {

@@ -17,6 +17,12 @@ import com.example.a501project.NavigationActivity
 import com.example.a501project.R
 import com.example.a501project.databinding.ActivityLoginBinding
 import com.example.a501project.ui.register.RegisterActivity
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 
 class LoginActivity : AppCompatActivity() {
@@ -34,6 +40,35 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+
+        val trustAllCerts = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                override fun checkClientTrusted(
+                    chain: Array<X509Certificate?>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun checkServerTrusted(
+                    chain: Array<X509Certificate?>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate?> {
+                    return arrayOfNulls<X509Certificate>(0)
+                }
+            }
+        )
+
+        try {
+            val sslContext = SSLContext.getInstance("TLS")
+            sslContext.init(null, trustAllCerts, SecureRandom())
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.socketFactory)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)  //获取ViewModel,让ViewModel与此activity绑定

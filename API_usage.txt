@@ -1,0 +1,53 @@
+API Usage Document
+This document provides a brief overview of the API routes available in your application.
+
+Routes
+GET /hello
+Returns a simple "Hello World" message.
+
+GET /api/user/password
+Query parameters:
+username (required): The username for which you want to fetch the password.
+Returns: The password for the specified user.
+Error: Returns "User not found." if the user does not exist.
+GET /api/gamesapi/games
+Query parameters:
+platform (required): The platform for which you want to fetch the games.
+Returns: A JSON array of game names for the specified platform.
+Error: Returns "Platform not found or an error occurred." if the platform does not exist or an error occurs.
+GET /api/gamesapi/platform
+Query parameters:
+gamename (required): The game name for which you want to fetch the platform.
+Returns: The platform for the specified game name.
+Error: Returns "Game not found." if the game does not exist.
+GET /api/gamesapi/api
+Query parameters:
+gamename (required): The game name for which you want to fetch the API.
+Returns: The API for the specified game name.
+Error: Returns "Game not found." if the game does not exist.
+GET /api/user/favoriteGames
+Query parameters:
+username (required): The username for which you want to fetch the favorite games.
+Returns: A JSON array of favorite game names for the specified user.
+Error: Returns "User not found or an error occurred." if the user does not exist or an error occurs.
+POST /api/user/create
+Query parameters:
+username (required): The username of the new user.
+password (required): The password for the new user.
+Returns: A JSON object representing the created user.
+Error: Returns an error message if the user creation fails.
+POST /api/user/addgame
+Query parameters:
+username (required): The username of the user to add the favorite game.
+gamename (required): The game name to add as a favorite.
+Returns: A success message if the game is added successfully.
+Error: Returns an error message if adding the favorite game fails.
+POST /api/gamesapi/addgame
+Query parameters:
+gamename (required): The name of the game to add.
+platform (required): The platform of the game to add.
+api (required): The API of the game to add.
+Returns: A success message if the game is added successfully.
+Error: Returns an error message if adding the game fails.
+Usage
+To use the API, make HTTP requests to the specified routes with the required query parameters. You can use any HTTP client or library to send the requests. The API will return the data in JSON format for most routes.

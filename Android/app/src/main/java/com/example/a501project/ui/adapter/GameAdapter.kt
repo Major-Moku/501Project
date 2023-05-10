@@ -10,7 +10,7 @@ import com.example.a501project.R
 import com.example.a501project.data.Game
 import java.util.*
 
-class GameAdapter(private val items: MutableList<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>() , ItemTouchHelperAdapter {
+class GameAdapter(val items: MutableList<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>() , ItemTouchHelperAdapter {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.textView)
