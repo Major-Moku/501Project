@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a501project.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.databinding.FragmentHomeBinding
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
@@ -32,24 +37,45 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Create a list of games with their names and server status
-        val gameList = listOf(
-            Game("Steam", R.drawable.game_a, true),
-            Game("Origin", R.drawable.game_b, false),
-            //Game("Game C", R.drawable.game_c, true),
-            //Game("Game D", R.drawable.game_d, true),
-            //Game("Game E", R.drawable.game_e, false)
-        )
-        val layoutManager = LinearLayoutManager(requireContext())
+        var isSteamServerOnline = false
+        var isOriginServerOnline = false
+        lifecycleScope.launch {
 
-        // Find the RecyclerView in your layout
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+            try {
+                isSteamServerOnline = withContext(Dispatchers.IO) { Steam.isSteamServerOnline() }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error fetching Steam server status: ${e.message}", Toast.LENGTH_LONG).show()
+            }
 
-        // Create a vertical list of cards using RecyclerView
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = GameAdapter(gameList) { game ->
-            val bundle = Bundle().apply { putString("platformName", game.name) }
-            findNavController().navigate(R.id.action_homeFragment_to_gameServersFragment, bundle)
+            try {
+                isOriginServerOnline = withContext(Dispatchers.IO) { Origin.isOriginServerOnline() }
+            } catch (e: Exception) {
+                println(e.message)
+                Toast.makeText(context, "Error fetching Origin server status: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+
+            // Create a list of games with their names and server status
+            val gameList = listOf(
+                Game("Steam", R.drawable.game_a, isSteamServerOnline),
+                Game("Origin", R.drawable.game_b, isOriginServerOnline),
+                Game("Riot Games", R.drawable.game_c, true),
+                //Game("Game D", R.drawable.game_a, true),
+                //Game("Game E", R.drawable.game_e, false)
+            )
+            val layoutManager = LinearLayoutManager(requireContext())
+
+            // Find the RecyclerView in your layout
+            val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+
+            // Create a vertical list of cards using RecyclerView
+            recyclerView.layoutManager = layoutManager
+            recyclerView.adapter = GameAdapter(gameList) { game ->
+                val bundle = Bundle().apply { putString("platformName", game.name) }
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_gameServersFragment,
+                    bundle
+                )
+            }
         }
 
     }
