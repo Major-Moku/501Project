@@ -5,6 +5,7 @@ object CurrentUser {
     lateinit var username: String
     lateinit var password: String
     lateinit var favoriteList: List<Game>
+    lateinit var description: String
 
     // TODO login需要使用的方法， 获取favoriteList....
 
@@ -23,5 +24,9 @@ object CurrentUser {
         syncFavoriteList()
     }
 
+    fun setCredentials(username: String, password: String){
+        this.username = username
+        this.password = password
+    }
 
 }

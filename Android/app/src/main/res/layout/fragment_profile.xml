@@ -115,12 +115,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/profileUsernameText"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="bottom"
                     android:text="Username"/>
                 <TextView
+                    android:id="@+id/profilePasswordText"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"

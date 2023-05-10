@@ -14,6 +14,12 @@ import com.example.a501project.databinding.FragmentProfileBinding
 import com.example.a501project.ui.register.RegisterActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.a501project.data.CurrentUser
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class ProfileFragment : Fragment() {
 
@@ -50,15 +56,13 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.profileUsernameText.text = CurrentUser.username
+
         binding.editButton.setOnClickListener{
             val action = ProfileFragmentDirections.actionNavigationProfileToProfileEditFragment()
             findNavController().navigate(action)
         }
 
-//        binding.editButton.setOnClickListener{
-//            val newFragment = ProfileEditFragment()
-//            buttonClickListner?.onButtonClick(newFragment)
-//        }
 //        TODO: get content from db and set the edittext.
 //        binding.editTextTextPersonName.setText()
 //        binding.editTextTextPersonName2.setText()
@@ -74,4 +78,6 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
