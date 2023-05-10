@@ -16,6 +16,7 @@ import com.example.a501project.ui.RecyclerItemClickListener
 import com.example.a501project.ui.adapter.GameAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -40,6 +41,7 @@ class FavoriteFragment : Fragment() {
             myActivity = context // Assign the activity reference
         }
     }
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,45 +75,43 @@ class FavoriteFragment : Fragment() {
             val favoritaGames = gson.fromJson<List<String>>(responseBody, type)
 
             print(favoritaGames)
-
-            // process the response in the background thread
-            // ...
-
-            // update the UI in the main thread (if needed)
+            
             withContext(Dispatchers.Main) {
-                // update the UI
-                // ...
+
+                val myObjects = favoritaGames.map { Game(it, getMyDrawable(it)) }.toMutableList()
+
+                recyclerView.adapter = GameAdapter(myObjects)
+                // Add swipe to delete
+                val swipeToDeleteCallback = SwipeToDeleteCallback(recyclerView.adapter!! as GameAdapter)
+                val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+                itemTouchHelper.attachToRecyclerView(recyclerView)
+                val itemClickListener = myActivity.let {
+                    RecyclerItemClickListener(
+                        it, recyclerView,
+                        object : RecyclerItemClickListener.OnItemClickListener {
+                            override fun onItemClick(view: View, position: Int) {
+                                print(myObjects[position])
+                                // TODO http request, go to game fragment
+                                println("lalala")
+                            }
+                        })
+                }
+                if (itemClickListener != null) {
+                    recyclerView.addOnItemTouchListener(itemClickListener)
+                }
             }
         }
 
 
-        val myObjects = mutableListOf(
-            Game("Item 1", R.drawable.civil),
-            Game("Item 2", R.drawable.overcooked),
-            Game("Item 3", R.drawable.human_fall_flat)
-        )
 
-        recyclerView.adapter = GameAdapter(myObjects)
-
-        // Add swipe to delete
-        val swipeToDeleteCallback = SwipeToDeleteCallback(recyclerView.adapter!! as GameAdapter)
-        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-        val itemClickListener = this.context?.let {
-            RecyclerItemClickListener(
-                it, recyclerView,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                        // TODO http request, go to game fragment
-                        println("lalala")
-                    }
-                })
-        }
-        if (itemClickListener != null) {
-            recyclerView.addOnItemTouchListener(itemClickListener)
-        }
 
         return root
+    }
+
+    private fun getMyDrawable(it: String): Int {
+        if (it == "LOL") return R.drawable.civil
+        else if (it == "Gensin Impact") return R.drawable.overcooked
+        else return R.drawable.human_fall_flat
     }
 
     override fun onDestroyView() {
