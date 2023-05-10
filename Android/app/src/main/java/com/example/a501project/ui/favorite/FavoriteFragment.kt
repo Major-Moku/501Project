@@ -14,6 +14,8 @@ import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
 import com.example.a501project.ui.RecyclerItemClickListener
 import com.example.a501project.ui.adapter.GameAdapter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -54,29 +56,33 @@ class FavoriteFragment : Fragment() {
 
         //TODO http request favorite list
 
-//        GlobalScope.launch(Dispatchers.IO) {
-//            val requestBody = FormBody.Builder()
-//                .add("username", "Yan3")
-//                .build()
-//
-//            val request = Request.Builder()
-//                .url("https://34.130.240.157:4567/api/user/favoriteGames")
-//                .post(requestBody)
-//                .get()
-//                .build()
-//
-//            val response = HttpClient.instance.newCall(request).execute()
-//            val responseBody = response.body?.string()
-//
-//            // process the response in the background thread
-//            // ...
-//
-//            // update the UI in the main thread (if needed)
-//            withContext(Dispatchers.Main) {
-//                // update the UI
-//                // ...
-//            }
-//        }
+        GlobalScope.launch(Dispatchers.IO) {
+            val requestBody = FormBody.Builder()
+                .add("username", "Yan3")
+                .build()
+
+            val request = Request.Builder()
+                .url("https://cs501andriodsquad.com:4567/api/user/favoriteGames" + "?username=" + "Yan3")
+                .get()
+                .build()
+
+            val response = HttpClient.instance.newCall(request).execute()
+            val responseBody = response.body?.string()
+            val gson = Gson()
+            val type = object : TypeToken<List<String>>() {}.type
+            val favoritaGames = gson.fromJson<List<String>>(responseBody, type)
+
+            print(favoritaGames)
+
+            // process the response in the background thread
+            // ...
+
+            // update the UI in the main thread (if needed)
+            withContext(Dispatchers.Main) {
+                // update the UI
+                // ...
+            }
+        }
 
 
         val myObjects = mutableListOf(
