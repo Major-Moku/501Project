@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.R
+import com.example.a501project.api.COD
 import com.example.a501project.api.Dota2
 import com.example.a501project.api.LOL
 import com.example.a501project.api.LOR
@@ -51,7 +52,7 @@ class GameServersFragment : Fragment() {
         var isLORServerOnline = false
         var isTFTServerOnline = false
         var isValoServerOnline = false
-
+        
         lifecycleScope.launch {
 
             // Steam
@@ -111,6 +112,12 @@ class GameServersFragment : Fragment() {
                 Toast.makeText(context, "Error fetching Valorant server status: ${e.message}", Toast.LENGTH_LONG).show()
             }
 
+            val codServerStatuses = try {
+                COD.getServerStatuses()
+            } catch (e: Exception) {
+                emptyMap<String, Boolean>()
+            }
+
             val steamServerList = listOf(
                 Game("CSGO", R.drawable.csgo, isCSGOServerOnline),
                 Game("Dota 2", R.drawable.dota2, isDota2ServerOnline),
@@ -131,9 +138,24 @@ class GameServersFragment : Fragment() {
                 Game("Valorant", R.drawable.valo, isValoServerOnline)
             )
 
+            val activisionServerList = listOf(
+                Game("Call of Duty: Modern Warfare", R.drawable.codmw, codServerStatuses["Call of Duty: Modern Warfare"] ?: false),
+                Game("Call of Duty: Advanced Warfare", R.drawable.codaw, codServerStatuses["Call of Duty: Advanced Warfare"] ?: false),
+                Game("Call of Duty: Ghost", R.drawable.codg, codServerStatuses["Call of Duty: Ghosts"] ?: false),
+                Game("Call of Duty: Vanguard", R.drawable.codv, codServerStatuses["Call of Duty: Vanguard"] ?: false),
+                Game("Call of Duty: Modern Warfare II", R.drawable.codmw2, codServerStatuses["Call of Duty: Modern Warfare II"] ?: false),
+                Game("Call of Duty: Black Ops Cold War", R.drawable.codbocw, codServerStatuses["Call of Duty: Black Ops Cold War"] ?: false),
+                Game("Tony Hawk's Pro Skater 1 + 2", R.drawable.tony, codServerStatuses["Tony Hawk's Pro Skater 1 + 2"] ?: false),
+                Game("Call of Duty: WWII", R.drawable.codwwii, codServerStatuses["Call of Duty: WWII"] ?: false),
+                Game("Call of Duty: Black Ops II", R.drawable.cowboii, codServerStatuses["Call of Duty: Black Ops II"] ?: false),
+                Game("Call of Duty: Black Ops III", R.drawable.codboiii, codServerStatuses["Call of Duty: Black Ops III"] ?: false),
+                Game("Call of Duty: Modern Warfare Remastered", R.drawable.codmwr, codServerStatuses["Call of Duty: Modern Warfare Remastered"] ?: false)
+            )
+
             // Choose the appropriate server list based on the platform name
             val gameServerList = when (platformName) {
                 "Steam" -> steamServerList
+                "Activision" -> activisionServerList
                 "Origin" -> originServerList
                 "Riot Games" -> riotServerList
                 else -> emptyList<Game>()

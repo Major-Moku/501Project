@@ -57,9 +57,10 @@ class HomeFragment : Fragment() {
             // Create a list of games with their names and server status
             val gameList = listOf(
                 Game("Steam", R.drawable.game_a, isSteamServerOnline),
+                Game("Activision", R.drawable.activision, true),
                 Game("Origin", R.drawable.game_b, isOriginServerOnline),
                 Game("Riot Games", R.drawable.game_c, true),
-                //Game("Game D", R.drawable.game_a, true),
+
                 //Game("Game E", R.drawable.game_e, false)
             )
             val layoutManager = LinearLayoutManager(requireContext())
