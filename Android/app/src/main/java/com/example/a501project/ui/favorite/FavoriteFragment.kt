@@ -1,6 +1,7 @@
 package com.example.a501project.ui.favorite
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a501project.R
+import com.example.a501project.data.CurrentUser
 import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
 import com.example.a501project.ui.RecyclerItemClickListener
@@ -56,15 +58,9 @@ class FavoriteFragment : Fragment() {
 
         recyclerView.layoutManager = linearLayoutManager
 
-        //TODO http request favorite list
-
         GlobalScope.launch(Dispatchers.IO) {
-            val requestBody = FormBody.Builder()
-                .add("username", "Yan3")
-                .build()
-
             val request = Request.Builder()
-                .url("https://cs501andriodsquad.com:4567/api/user/favoriteGames" + "?username=" + "Yan3")
+                .url("https://cs501andriodsquad.com:4567/api/user/favoriteGames" + "?username=" + CurrentUser.username)
                 .get()
                 .build()
 
@@ -78,7 +74,7 @@ class FavoriteFragment : Fragment() {
             
             withContext(Dispatchers.Main) {
 
-                val myObjects = favoritaGames.map { Game(it, getMyDrawable(it)) }.toMutableList()
+                val myObjects = favoritaGames.map { Game(it, getMyDrawable(it) as Int) }.toMutableList()
 
                 recyclerView.adapter = GameAdapter(myObjects)
                 // Add swipe to delete
@@ -108,10 +104,17 @@ class FavoriteFragment : Fragment() {
         return root
     }
 
-    private fun getMyDrawable(it: String): Int {
-        if (it == "LOL") return R.drawable.civil
-        else if (it == "Gensin Impact") return R.drawable.overcooked
-        else return R.drawable.human_fall_flat
+    private fun getMyDrawable(it: String): Any {
+        return if (it == "CSGO") R.drawable.csgo
+        else if (it == "Dota 2") R.drawable.dota2
+        else if (it == "Warframe") R.drawable.warframe
+        else if (it == "Lost Ark") R.drawable.lostark
+        else if (it == "Apex Legends") R.drawable.apex
+        else if (it == "League of Legends") R.drawable.lol
+        else if (it == "Legends of Runeterra") R.drawable.lor
+        else if (it == "Teamfight Tactics") R.drawable.tft
+
+        else R.drawable.valo
     }
 
     override fun onDestroyView() {
