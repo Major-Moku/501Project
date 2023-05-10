@@ -14,7 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.R
 import com.example.a501project.api.Dota2
+import com.example.a501project.api.LOL
+import com.example.a501project.api.LOR
 import com.example.a501project.api.LostArk
+import com.example.a501project.api.TFT
+import com.example.a501project.api.Valorant
 import com.example.a501project.api.Warframe
 import csgo
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +47,10 @@ class GameServersFragment : Fragment() {
         var isDota2ServerOnline = false
         var isWarFrameServerOnline = false
         var isLostArkServerOnline = false
+        var isLOLServerOnline = false
+        var isLORServerOnline = false
+        var isTFTServerOnline = false
+        var isValoServerOnline = false
 
         lifecycleScope.launch {
 
@@ -79,6 +87,30 @@ class GameServersFragment : Fragment() {
             }
 
             // Riot
+            try {
+                isLOLServerOnline = withContext(Dispatchers.IO) { LOL.isLOLServerOnline() }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error fetching LOL server status: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+
+            try {
+                isLORServerOnline = withContext(Dispatchers.IO) { LOR.isLORServerOnline() }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error fetching LOR server status: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+
+            try {
+                isTFTServerOnline = withContext(Dispatchers.IO) { TFT.isTFTServerOnline() }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error fetching TFT server status: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+
+            try {
+                isValoServerOnline = withContext(Dispatchers.IO) { Valorant.isValServerOnline() }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error fetching Valorant server status: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+
             val steamServerList = listOf(
                 Game("CSGO", R.drawable.csgo, isCSGOServerOnline),
                 Game("Dota 2", R.drawable.dota2, isDota2ServerOnline),
@@ -92,10 +124,18 @@ class GameServersFragment : Fragment() {
                 // Add more Origin game servers here
             )
 
+            val riotServerList = listOf(
+                Game("League of Legends", R.drawable.lol, isLOLServerOnline),
+                Game("Legends of Runeterra", R.drawable.lor, isLORServerOnline),
+                Game("Teamfight Tactics", R.drawable.tft, isTFTServerOnline),
+                Game("Valorant", R.drawable.valo, isValoServerOnline)
+            )
+
             // Choose the appropriate server list based on the platform name
             val gameServerList = when (platformName) {
                 "Steam" -> steamServerList
                 "Origin" -> originServerList
+                "Riot Games" -> riotServerList
                 else -> emptyList<Game>()
             }
 
