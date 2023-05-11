@@ -72,7 +72,7 @@ class ProfileEditFragment: Fragment() {
                     startActivity(intent)
                 }
                 else{
-                    Toast.makeText(requireContext(), "Something went wrong, please check the input.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -89,7 +89,7 @@ class ProfileEditFragment: Fragment() {
         val baseUrl = "https://cs501andriodsquad.com:4567/api/user/updateUser" // TODO: Fill in the server base url
         val queryParam1 = "oldUsername=$oldUsername"
         val queryParam2 = "newUsername=$newUserName"
-        val queryParam3 = "newPassword=$newPassword"
+        val queryParam3 = "password=$newPassword"
         val queryParam4 = "description=$description"
         val url = URL("$baseUrl?$queryParam1&$queryParam2&$queryParam3&$queryParam4")
 
@@ -101,7 +101,10 @@ class ProfileEditFragment: Fragment() {
         val response:String = if(responseCode == HttpURLConnection.HTTP_OK){
             "User updated successfully."
         }else if(responseCode == HttpURLConnection.HTTP_BAD_REQUEST){
-            "Something went wrong, please check the input. "
+            val reader = BufferedReader(InputStreamReader(connection.errorStream))
+            val errorMessage = reader.use { it.readText() }
+            reader.close()
+            errorMessage
         }else{
             "Unexpected HTTP response: ${connection.responseCode}"
         }

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/game_image"
@@ -21,7 +21,8 @@
             android:id="@+id/status_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_online" />
+            android:src="@drawable/ic_online"
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:id="@+id/game_name"
@@ -30,7 +31,9 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
 </LinearLayout>

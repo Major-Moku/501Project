@@ -7,5 +7,5 @@ Work Division
 	Sijin Chen: Set Up Database + Game Param API
 	Zhiqi Jin: Set Up Database + Platform & Game API
 	Yanpeng Zhao: Set Up Database + Login API
-	Pengfei Li: part of platform detail + game detail
-	Song Xu: navigation and favorite
+	Pengfei Li: navigation + favorite + part of server deployment
+	Song Xu: part of platform detail + game detail

@@ -26,9 +26,10 @@ object CurrentUser {
         syncFavoriteList()
     }
 
-    fun setCredentials(username: String, password: String){
+    fun setCredentials(username: String, password: String, description: String){
         this.username = username
         this.password = password
+        this.description = description
     }
 
 }

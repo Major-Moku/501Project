@@ -1,22 +1,26 @@
 package com.example.a501project.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a501project.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.databinding.FragmentHomeBinding
 import androidx.navigation.fragment.findNavController
-import com.example.a501project.ui.adapter.GameAdapter
+
 import com.example.a501project.ui.adapter.Platform
 import com.example.a501project.ui.adapter.PlatformAdapter
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,6 +68,7 @@ class HomeFragment : Fragment() {
                 Platform("Riot Games", R.drawable.game_c, true),
                 //Game("Game D", R.drawable.game_a, true),
                 //Game("Game E", R.drawable.game_e, false)
+
             )
             val layoutManager = LinearLayoutManager(requireContext())
 

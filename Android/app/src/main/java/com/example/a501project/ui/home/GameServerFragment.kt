@@ -43,6 +43,7 @@ class GameServersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val steamServerList = listOf(
             Game("CSGO", R.drawable.csgo ),
             Game("Dota 2", R.drawable.dota2),
@@ -55,6 +56,7 @@ class GameServersFragment : Fragment() {
             Game("Apex Legends", R.drawable.apex)
             // Add more Origin game servers here
         ).toMutableList()
+
 
         val riotServerList = listOf(
             Game("League of Legends", R.drawable.lol),
@@ -91,6 +93,7 @@ class GameServersFragment : Fragment() {
                 })
         }
         recyclerView.addOnItemTouchListener(itemClickListener)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
