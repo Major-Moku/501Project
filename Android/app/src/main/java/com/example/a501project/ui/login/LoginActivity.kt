@@ -264,9 +264,6 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Password should not contain any special characters or empty spaces ", Toast.LENGTH_SHORT).show()
             return false
         }
-
-
-
         // TODO: add more rules
 
         return true
@@ -305,7 +302,6 @@ class LoginActivity : AppCompatActivity() {
         if(responseCode == HttpURLConnection.HTTP_NOT_FOUND){
             return@async "User not found."
         }else if (responseCode != HttpURLConnection.HTTP_OK) {
-            // Handle other non-success HTTP response codes
             return@async "Error: $responseCode"
         }
 
