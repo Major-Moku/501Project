@@ -40,6 +40,7 @@ class RegisterActivity : AppCompatActivity(){
 //            }
             val username = getName()
             val password = getPwd()
+            val description = getDesc()
 
                 // Validate text field value of username
             val isValidUsername = validateUsername(username)
@@ -55,7 +56,7 @@ class RegisterActivity : AppCompatActivity(){
             CoroutineScope(Dispatchers.Main).launch{
                 val response = result.await()
                 if (response.equals("User not found.")){
-                    val updateResult = updateDB(username,password).await()
+                    val updateResult = updateDB(username,password,description).await()
 //                    println(updateResult)
                     if(updateResult.equals("New user added successfully.")){
                         Toast.makeText(this@RegisterActivity,"New user added successfully. Please relogin.",Toast.LENGTH_LONG).show()
@@ -93,6 +94,10 @@ class RegisterActivity : AppCompatActivity(){
 
     private fun getPwd():String{
         return binding.PasswordForRegister.text.toString()
+    }
+
+    private fun getDesc():String{
+        return binding.DescriptionForRegister.text.toString()
     }
 
     private fun validatePassword(password : String): Boolean {
@@ -145,12 +150,13 @@ class RegisterActivity : AppCompatActivity(){
         return true
     }
 
-    private fun updateDB(username : String, password : String): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
+    private fun updateDB(username : String, password : String, description : String): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
         // Construct the complete URL with query parameters
         val baseUrl = "https://cs501andriodsquad.com:4567/api/user/create" // TODO: Fill in the server base url
         val queryParam1 = "username=$username"
         val queryParam2 = "password=$password"
-        val url = URL("$baseUrl?$queryParam1&$queryParam2")
+        val queryParam3 = "description=$description"
+        val url = URL("$baseUrl?$queryParam1&$queryParam2&$queryParam3")
 
         // Send HTTP POST request to fetch user password
         val connection = url.openConnection() as HttpURLConnection
