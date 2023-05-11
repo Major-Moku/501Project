@@ -14,8 +14,22 @@
             app:destination="@id/gameServersFragment" />
     </fragment>
 
+
+
     <fragment
         android:id="@+id/gameServersFragment"
         android:name="com.example.a501project.ui.home.GameServersFragment"
-        tools:layout="@layout/fragment_game_servers" />
+        tools:layout="@layout/fragment_game_servers">
+        <action
+            android:id="@+id/action_gameServersFragment_to_gameDetailFragment"
+            app:destination="@id/GameDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GameDetailFragment"
+        android:name="com.example.a501project.ui.home.GameDetailFragment"
+        tools:layout="@layout/fragment_game_detail" />
+
+
+
 </navigation>

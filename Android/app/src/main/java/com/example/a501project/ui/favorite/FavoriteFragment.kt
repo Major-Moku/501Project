@@ -1,21 +1,20 @@
 package com.example.a501project.ui.favorite
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a501project.R
 import com.example.a501project.data.CurrentUser
-import com.example.a501project.data.Game
 import com.example.a501project.databinding.FragmentFavoriteBinding
-import com.example.a501project.ui.RecyclerItemClickListener
-import com.example.a501project.ui.adapter.GameAdapter
+import com.example.a501project.ui.adapter.FavoriteGameAdapter
+import com.example.a501project.ui.adapter.Game
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -23,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.FormBody
 import okhttp3.Request
 
 class FavoriteFragment : Fragment() {
@@ -69,37 +67,89 @@ class FavoriteFragment : Fragment() {
             val gson = Gson()
             val type = object : TypeToken<List<String>>() {}.type
             val favoritaGames = gson.fromJson<List<String>>(responseBody, type)
-
-            print(favoritaGames)
             
             withContext(Dispatchers.Main) {
 
                 val myObjects = favoritaGames.map { Game(it, getMyDrawable(it) as Int) }.toMutableList()
 
-                recyclerView.adapter = GameAdapter(myObjects)
-                // Add swipe to delete
-                val swipeToDeleteCallback = SwipeToDeleteCallback(recyclerView.adapter!! as GameAdapter)
+                recyclerView.adapter = FavoriteGameAdapter(myObjects)
+                val swipeToDeleteCallback = SwipeToDeleteCallback(recyclerView.adapter!! as FavoriteGameAdapter)
                 val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
                 itemTouchHelper.attachToRecyclerView(recyclerView)
-                val itemClickListener = myActivity.let {
-                    RecyclerItemClickListener(
-                        it, recyclerView,
-                        object : RecyclerItemClickListener.OnItemClickListener {
-                            override fun onItemClick(view: View, position: Int) {
-                                print(myObjects[position])
-                                // TODO http request, go to game fragment
-                                println("lalala")
+                // Add swipe to delete
+                recyclerView.addOnItemTouchListener(
+                    SwipeOrClickListener(
+                        context = myActivity,
+                        onSwipe = { position ->
+                            // Handle swipe gesture for the item at the given position
+                            // You can access the adapter and data to perform any desired actions
+                            GlobalScope.launch(Dispatchers.IO) {
+                                val request = Request.Builder()
+                                    .url("https://cs501andriodsquad.com:4567/api/user/deletegame" + "?username=" + CurrentUser.username + "&gamename=" + (recyclerView.adapter as FavoriteGameAdapter).items[position].name)
+                                    .delete()
+                                    .build()
+
+                                val response = HttpClient.instance.newCall(request).execute()
+                                val responseBody = response.body?.string()
+
+                                withContext(Dispatchers.Main) {
+                                    if (response.code == 200) {
+                                        myObjects.removeAt(position)
+                                        (recyclerView.adapter as FavoriteGameAdapter).notifyItemRemoved(position)
+                                    }
+
+                                }
                             }
-                        })
-                }
-                if (itemClickListener != null) {
-                    recyclerView.addOnItemTouchListener(itemClickListener)
-                }
+                            // ...
+                        },
+                        onClick = { position ->
+                            // Handle click gesture for the item at the given position
+                            // You can access the adapter and data to perform any desired actions
+                            val bundle = Bundle().apply { putString("gameName", myObjects[position].name) }
+                                                                        findNavController().navigate(
+                                                                            R.id.action_favoriteFragment_to_gameDetailFragment,
+                                                                            bundle)
+                            // ...
+                        }
+                    )
+                )
+//                val itemClickListener = myActivity.let {
+//                    RecyclerItemClickListener(
+//                        it, recyclerView,
+//                        object : RecyclerView.OnItemTouchListener {
+//                            private val gestureDetector: GestureDetector
+//
+//                            init {
+//                                gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+//                                    override fun onDoubleTap(e: MotionEvent, position: Int): Boolean {
+//                                        val bundle = Bundle().apply { putString("gameName", myObjects[position].name) }
+//                                                                        findNavController().navigate(
+//                                                                            R.id.action_favoriteFragment_to_gameDetailFragment,
+//                                                                            bundle)
+//
+//                                    }
+//                                })
+//                            }
+//
+//                            override fun onInterceptTouchEvent(
+//                                rv: RecyclerView,
+//                                e: MotionEvent
+//                            ): Boolean {
+//                                TODO("Not yet implemented")
+//                            }
+//
+//                            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+//                                TODO("Not yet implemented")
+//                            }
+//
+//                            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+//                                TODO("Not yet implemented")
+//                            }
+//                        })
+//                }
+
             }
         }
-
-
-
 
         return root
     }

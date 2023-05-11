@@ -1,5 +1,7 @@
 package com.example.a501project.data
 
+import com.example.a501project.ui.adapter.Game
+
 object CurrentUser {
     lateinit var nickname: String
     lateinit var username: String

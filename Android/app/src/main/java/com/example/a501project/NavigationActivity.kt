@@ -10,9 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.a501project.databinding.ActivityNavigationBinding
-import com.example.a501project.ui.profile.ProfileEditFragment
-import com.example.a501project.ui.profile.ProfileFragment
-import androidx.fragment.app.Fragment
 
 
 class NavigationActivity : AppCompatActivity()/*, ProfileFragment.OnButtonClickListener */{
@@ -50,18 +47,5 @@ class NavigationActivity : AppCompatActivity()/*, ProfileFragment.OnButtonClickL
         }
 
     }
-
-//    override fun onButtonClick(newFragment: ProfileEditFragment){
-//        val currentFragment = supportFragmentManager.findFragmentById(R.id.nav_view)
-//        if(currentFragment is ProfileFragment){
-//            val view = currentFragment.view
-//            view?.findViewById<Button>(R.id.editButton)?.setOnClickListener{
-//                val fragmentTransaction = supportFragmentManager.beginTransaction()
-//                fragmentTransaction.replace(R.id.container, newFragment)
-//                fragmentTransaction.addToBackStack(null)
-//                fragmentTransaction.commit()
-//            }
-//        }
-//    }
 
 }

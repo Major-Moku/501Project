@@ -14,6 +14,9 @@ import com.example.a501project.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.databinding.FragmentHomeBinding
 import androidx.navigation.fragment.findNavController
+import com.example.a501project.ui.adapter.GameAdapter
+import com.example.a501project.ui.adapter.Platform
+import com.example.a501project.ui.adapter.PlatformAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,10 +58,10 @@ class HomeFragment : Fragment() {
             }
 
             // Create a list of games with their names and server status
-            val gameList = listOf(
-                Game("Steam", R.drawable.game_a, isSteamServerOnline),
-                Game("Origin", R.drawable.game_b, isOriginServerOnline),
-                Game("Riot Games", R.drawable.game_c, true),
+            val platformList = listOf(
+                Platform("Steam", R.drawable.game_a, isSteamServerOnline),
+                Platform("Origin", R.drawable.game_b, isOriginServerOnline),
+                Platform("Riot Games", R.drawable.game_c, true),
                 //Game("Game D", R.drawable.game_a, true),
                 //Game("Game E", R.drawable.game_e, false)
             )
@@ -69,8 +72,8 @@ class HomeFragment : Fragment() {
 
             // Create a vertical list of cards using RecyclerView
             recyclerView.layoutManager = layoutManager
-            recyclerView.adapter = GameAdapter(gameList) { game ->
-                val bundle = Bundle().apply { putString("platformName", game.name) }
+            recyclerView.adapter = PlatformAdapter(platformList) { platform ->
+                val bundle = Bundle().apply { putString("platformName", platform.name) }
                 findNavController().navigate(
                     R.id.action_homeFragment_to_gameServersFragment,
                     bundle
@@ -84,47 +87,9 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
-data class Game(val name: String, val imageRes: Int, val isOnline: Boolean)
+
+
+
 
 // Define a RecyclerView adapter for the list of games
-class GameAdapter(
-    private val gameList: List<Game>,
-    private val onGameClick: ((Game) -> Unit)? = null
-) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
-
-    // Inflate the layout for each item in the list
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_game, parent, false)
-        return ViewHolder(view)
-    }
-
-    // Set the data for each item in the list
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val game = gameList[position]
-        holder.gameName.text = game.name
-        holder.gameImage.setImageResource(game.imageRes)
-        if (game.isOnline) {
-            holder.statusIcon.setImageResource(R.drawable.ic_online)
-        } else {
-            holder.statusIcon.setImageResource(R.drawable.ic_offline)
-        }
-
-        // Set the click listener for the item
-        holder.itemView.setOnClickListener {
-            onGameClick?.invoke(game)
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return gameList.size
-    }
-
-    // Define a ViewHolder to hold the views for each item in the list
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val gameName: TextView = view.findViewById(R.id.game_name)
-        val gameImage: ImageView = view.findViewById(R.id.game_image)
-        val statusIcon: ImageView = view.findViewById(R.id.status_icon)
-    }
-}
 

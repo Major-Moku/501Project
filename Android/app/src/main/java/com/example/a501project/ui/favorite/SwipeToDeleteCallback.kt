@@ -3,7 +3,7 @@ package com.example.a501project.ui.favorite
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.data.CurrentUser
-import com.example.a501project.ui.adapter.GameAdapter
+import com.example.a501project.ui.adapter.FavoriteGameAdapter
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 
-class SwipeToDeleteCallback(private val adapter: GameAdapter) :
+class SwipeToDeleteCallback(private val adapter: FavoriteGameAdapter) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
     override fun onMove(
@@ -44,9 +44,5 @@ class SwipeToDeleteCallback(private val adapter: GameAdapter) :
 
             }
         }
-
-
-
-
     }
 }

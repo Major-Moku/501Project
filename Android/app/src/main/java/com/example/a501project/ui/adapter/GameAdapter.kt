@@ -5,47 +5,45 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.R
-import com.example.a501project.data.Game
-import java.util.*
 
-class GameAdapter(val items: MutableList<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>() , ItemTouchHelperAdapter {
+class GameAdapter(
+    val gameList: MutableList<Game>,
+    private val onGameClick: ((Game) -> Unit)? = null
+) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.textView)
-        val imageView: ImageView = itemView.findViewById(R.id.game_img)
-    }
-
+    // Inflate the layout for each item in the list
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.game_card_layout, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_game, parent, false)
+
+        view.findViewById<ImageView>(R.id.status_icon).isInvisible = true
         return ViewHolder(view)
     }
 
+    // Set the data for each item in the list
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = items[position].name
-        holder.imageView.setImageResource(items[position].myImage)
+        val game = gameList[position]
+        holder.gameName.text = game.name
+        holder.gameImage.setImageResource(game.imageRes)
+
+        // Set the click listener for the item
+        holder.itemView.setOnClickListener {
+            onGameClick?.invoke(game)
+        }
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return gameList.size
     }
 
-    override fun onItemDismiss(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
+    // Define a ViewHolder to hold the views for each item in the list
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val gameName: TextView = view.findViewById(R.id.game_name)
+        val gameImage: ImageView = view.findViewById(R.id.game_image)
     }
-
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        Collections.swap(items, fromPosition, toPosition)
-        notifyItemMoved(fromPosition, toPosition)
-        return true
-    }
-
-
 }
 
-interface ItemTouchHelperAdapter {
-    fun onItemDismiss(position: Int)
-    fun onItemMove(fromPosition: Int, toPosition: Int): Boolean
-}
+data class Game(val name: String, val imageRes: Int)
