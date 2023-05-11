@@ -42,6 +42,11 @@ class GameServersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        recyclerView.adapter = GameAdapter(emptyList())
 
         var isCSGOServerOnline = false
         var isApexServerOnline = false
@@ -161,12 +166,19 @@ class GameServersFragment : Fragment() {
                 else -> emptyList<Game>()
             }
 
+            withContext(Dispatchers.Main) {
+                recyclerView.adapter = GameAdapter(gameServerList)
+            }
+
+            /*
             val layoutManager = LinearLayoutManager(requireContext())
             val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
             recyclerView.layoutManager = layoutManager
             recyclerView.adapter = GameAdapter(gameServerList)
             recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), layoutManager.orientation))
+            */
         }
+
     }
 
 

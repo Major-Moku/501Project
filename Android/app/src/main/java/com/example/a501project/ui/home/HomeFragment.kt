@@ -1,19 +1,27 @@
 package com.example.a501project.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a501project.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a501project.databinding.FragmentHomeBinding
 import androidx.navigation.fragment.findNavController
+import com.example.a501project.data.CurrentUser
+import io.ktor.client.HttpClient
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.request.post
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -93,6 +101,11 @@ class GameAdapter(
     private val onGameClick: ((Game) -> Unit)? = null
 ) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
+    private val client = HttpClient {
+        install(JsonFeature) {
+            serializer = KotlinxSerializer()
+        }
+    }
     // Inflate the layout for each item in the list
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -115,17 +128,39 @@ class GameAdapter(
         holder.itemView.setOnClickListener {
             onGameClick?.invoke(game)
         }
+
+        holder.favButton.setOnClickListener {
+            Log.d("GameAdapter", "Favorite button clicked for game ${game.name}")
+            addGameToFavorites(game.name, holder)
+        }
     }
 
     override fun getItemCount(): Int {
         return gameList.size
     }
 
+
     // Define a ViewHolder to hold the views for each item in the list
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val gameName: TextView = view.findViewById(R.id.game_name)
         val gameImage: ImageView = view.findViewById(R.id.game_image)
         val statusIcon: ImageView = view.findViewById(R.id.status_icon)
+        val favButton: Button = itemView.findViewById(R.id.favorite_button)
+    }
+
+    private fun addGameToFavorites(gameName: String, holder: ViewHolder) {
+        val scope = (holder.itemView.context as? LifecycleOwner)?.lifecycleScope
+        scope?.launch(Dispatchers.IO) {
+            try {
+                val url = "https://cs501andriodsquad.com:4567/api/user/addgame?username=${CurrentUser.username}&gamename=$gameName"
+                client.post<Unit>(url)
+                Log.d("GameAdapter", "Successfully added game $gameName to favorites")
+
+            } catch (e: Exception) {
+                // Handle error
+                Log.d("favorite game","fail to add a game")
+            }
+        }
     }
 }
 
