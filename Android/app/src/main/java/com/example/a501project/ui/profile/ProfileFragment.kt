@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.profileUsernameText.text = CurrentUser.username
-
+        binding.descriptionProfile.text = CurrentUser.description
         binding.editButton.setOnClickListener{
             val action = ProfileFragmentDirections.actionNavigationProfileToProfileEditFragment()
             findNavController().navigate(action)

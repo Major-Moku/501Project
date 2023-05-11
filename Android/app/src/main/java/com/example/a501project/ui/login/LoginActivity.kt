@@ -9,6 +9,7 @@ import com.example.a501project.NavigationActivity
 import com.example.a501project.data.CurrentUser
 import com.example.a501project.databinding.ActivityLoginBinding
 import com.example.a501project.ui.register.RegisterActivity
+import io.ktor.network.sockets.*
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -186,7 +187,8 @@ class LoginActivity : AppCompatActivity() {
                 } else{
                     Toast.makeText(this@LoginActivity, "Logged in successfully", Toast.LENGTH_SHORT).show()
                     //TODO: set the value for CurrentUser.
-                    CurrentUser.setCredentials(username,response)
+                    val descriptionResult = queryDescription(username).await()
+                    CurrentUser.setCredentials(username,response, descriptionResult)
                     startActivity(Intent(this@LoginActivity, NavigationActivity::class.java))
                 }
                 // Update UI with response
@@ -324,6 +326,39 @@ class LoginActivity : AppCompatActivity() {
         connection.disconnect()
 
         response.toString()
+    }
+
+    private fun queryDescription (username : String) : Deferred<String> = CoroutineScope(Dispatchers.IO).async{
+        val baseUrl = "https://cs501andriodsquad.com:4567/api/user/description" // TODO: Fill in the server base url
+        val queryParam = "username=$username"
+        val url = URL("$baseUrl?$queryParam")
+
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.connectTimeout = 5000
+        val responseCode = connection.responseCode
+
+        if(responseCode != HttpURLConnection.HTTP_OK){
+            return@async "Error: $responseCode"
+        }
+
+        val inputStream = connection.inputStream
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        val response = StringBuffer()
+
+        var line: String? = reader.readLine()
+        while (line != null) {
+            response.append(line)
+            line = reader.readLine()
+        }
+
+        // Clean up resources
+        reader.close()
+        inputStream.close()
+        connection.disconnect()
+
+        response.toString()
+
     }
 
 }
