@@ -1,5 +1,6 @@
 package com.example.a501project.api
 
+import com.example.a501project.data.RiotApiKey
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.features.json.*
@@ -15,7 +16,7 @@ object LOR {
     }
 
     suspend fun isLORServerOnline(): Boolean = withContext(Dispatchers.IO) {
-        val response: String = client.get("https://americas.api.riotgames.com/lor/status/v1/platform-data?api_key=RGAPI-50cb78b7-21f1-4539-9295-587b9fec524e"){
+        val response: String = client.get("https://americas.api.riotgames.com/lor/status/v1/platform-data?api_key=${RiotApiKey.value}"){
             headers {
                 append("User-Agent", "PostmanRuntime/7.32.2")
                 append("Accept", "*/*")
