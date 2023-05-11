@@ -61,8 +61,7 @@ class HomeFragment : Fragment() {
                 Platform("Steam", R.drawable.game_a, isSteamServerOnline),
                 Platform("Origin", R.drawable.game_b, isOriginServerOnline),
                 Platform("Riot Games", R.drawable.game_c, true),
-                //Game("Game D", R.drawable.game_a, true),
-                //Game("Game E", R.drawable.game_e, false)
+                Platform("Activision", R.drawable.activision, true)
 
             )
             val layoutManager = LinearLayoutManager(requireContext())

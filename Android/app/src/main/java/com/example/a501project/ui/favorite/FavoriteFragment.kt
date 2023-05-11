@@ -163,7 +163,17 @@ class FavoriteFragment : Fragment() {
         else if (it == "League of Legends") R.drawable.lol
         else if (it == "Legends of Runeterra") R.drawable.lor
         else if (it == "Teamfight Tactics") R.drawable.tft
-
+        else if (it == "Call of Duty: Modern Warfare") R.drawable.codmw
+        else if (it == "Call of Duty: Advanced Warfare") R.drawable.codaw
+        else if (it == "Call of Duty: Ghost") R.drawable.codg
+        else if (it == "Call of Duty: Vanguard") R.drawable.codv
+        else if (it == "Call of Duty: Modern Warfare II")  R.drawable.codmw2
+        else if (it == "Call of Duty: Black Ops Cold War") R.drawable.codbocw
+        else if (it == "Tony Hawk's Pro Skater 1 + 2") R.drawable.tony
+        else if (it == "Call of Duty: WWII") R.drawable.codwwii
+        else if (it == "Call of Duty: Black Ops II") R.drawable.cowboii
+        else if (it == "Call of Duty: Black Ops III") R.drawable.codboiii
+        else if (it == "Call of Duty: Modern Warfare Remastered") R.drawable.codmwr
         else R.drawable.valo
     }
 

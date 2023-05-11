@@ -65,13 +65,30 @@ class GameServersFragment : Fragment() {
             Game("Valorant", R.drawable.valo)
         ).toMutableList()
 
+        val activisionServerList = listOf(
+            Game("Call of Duty: Modern Warfare", R.drawable.codmw),
+            Game("Call of Duty: Advanced Warfare", R.drawable.codaw),
+            Game("Call of Duty: Ghost", R.drawable.codg),
+            Game("Call of Duty: Vanguard", R.drawable.codv),
+            Game("Call of Duty: Modern Warfare II", R.drawable.codmw2),
+            Game("Call of Duty: Black Ops Cold War", R.drawable.codbocw),
+            Game("Tony Hawk's Pro Skater 1 + 2", R.drawable.tony),
+            Game("Call of Duty: WWII", R.drawable.codwwii),
+            Game("Call of Duty: Black Ops II", R.drawable.cowboii),
+            Game("Call of Duty: Black Ops III", R.drawable.codboiii),
+            Game("Call of Duty: Modern Warfare Remastered", R.drawable.codmwr)
+        ).toMutableList()
+
         // Choose the appropriate server list based on the platform name
         val gameServerList = when (platformName) {
             "Steam" -> steamServerList
             "Origin" -> originServerList
             "Riot Games" -> riotServerList
+            "Activision" -> activisionServerList
             else -> emptyList<Game>().toMutableList()
         }
+
+
 
         val layoutManager = LinearLayoutManager(requireContext())
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
