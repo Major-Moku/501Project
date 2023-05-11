@@ -66,7 +66,8 @@ class GameDetailFragment : Fragment() {
         val root: View = binding.root
 
         gameName = arguments?.getString("gameName") ?: ""
-       inflater.inflate(R.layout.fragment_game_detail, container, false)
+        inflater.inflate(R.layout.fragment_game_detail, container, false)
+        setHasOptionsMenu(true) // Enable options menu
 
         val button = binding.subscribe
         button.setOnClickListener {
